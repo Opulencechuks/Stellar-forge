@@ -20,6 +20,7 @@ export const CreateToken: React.FC = () => {
   const { addToast } = useToast()
   const { stellarService } = useStellarContext()
   const { refreshBalance } = useWalletContext()
+  const { network } = useNetwork()
 
   const [isDeploying, setIsDeploying] = useState(false)
   const [deployedToken, setDeployedToken] = useState<DeployedToken | null>(null)

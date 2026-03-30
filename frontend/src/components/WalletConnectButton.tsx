@@ -1,11 +1,14 @@
 import { useWalletContext } from '../context/WalletContext'
-import { truncateAddress, formatXLM } from '../utils/formatting'
+import { useNetwork } from '../context/NetworkContext'
+import { formatXLM } from '../utils/formatting'
+import { ExplorerLink } from './ExplorerLink'
 import { Button } from './UI/Button'
 import { Spinner } from './UI/Spinner'
 import { CopyButton } from './CopyButton'
 
 export const WalletConnectButton: React.FC = () => {
   const { wallet, isConnecting, isInstalled, connect, disconnect } = useWalletContext()
+  const { network } = useNetwork()
 
   // Wallet not installed state
   if (!isInstalled) {
