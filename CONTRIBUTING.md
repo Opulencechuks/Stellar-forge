@@ -6,6 +6,7 @@ Thank you for your interest in contributing to StellarForge! This document provi
 
 - [Prerequisites](#prerequisites)
 - [Local Development Setup](#local-development-setup)
+- [Docker Development Setup](#docker-development-setup)
 - [Development Workflow](#development-workflow)
 - [Commit Message Format](#commit-message-format)
 - [Pull Request Process](#pull-request-process)
@@ -134,6 +135,162 @@ cargo test
 ```
 
 If all commands pass, your environment is ready for development.
+
+## Docker Development Setup
+
+For a consistent, reproducible development environment, you can use Docker instead of installing dependencies locally.
+
+### Prerequisites for Docker Setup
+
+- **Docker** (v20.10+): Container runtime
+- **Docker Compose** (v2.0+): Multi-container orchestration
+
+### Verify Docker Installation
+
+```bash
+docker --version          # Should be v20.10 or higher
+docker compose version    # Should be v2.0 or higher
+```
+
+### Step 1: Clone the Repository
+
+```bash
+git clone https://github.com/YOUR_USERNAME/Stellar-forge.git
+cd Stellar-forge
+```
+
+### Step 2: Start Development Environment
+
+```bash
+# Start both frontend and contract builder services
+docker compose up -d
+
+# View logs
+docker compose logs -f frontend
+docker compose logs -f contract-builder
+```
+
+This will:
+- Build and start the frontend development server on `http://localhost:5173`
+- Build the contract builder environment with Rust, Stellar CLI, and all dependencies
+- Mount source directories as volumes for hot reloading
+
+### Step 3: Verify Setup
+
+```bash
+# Check frontend is running
+curl http://localhost:5173
+
+# Access contract builder for testing
+docker compose exec contract-builder bash
+# Inside container:
+cd token-factory
+cargo test
+```
+
+### Working with Docker Environment
+
+#### Frontend Development
+
+The frontend runs automatically with hot reloading. Make changes to files in `frontend/src/` and they'll be reflected immediately at `http://localhost:5173`.
+
+```bash
+# View frontend logs
+docker compose logs -f frontend
+
+# Restart frontend service
+docker compose restart frontend
+```
+
+#### Contract Development
+
+Access the contract builder environment for Rust development:
+
+```bash
+# Enter contract builder shell
+docker compose exec contract-builder bash
+
+# Inside the container, you can:
+cd token-factory
+
+# Run tests
+cargo test
+
+# Build contracts
+cargo build --target wasm32-unknown-unknown --release
+
+# Run the build script
+./build.sh
+
+# Use Stellar CLI
+stellar --help
+```
+
+#### Managing Services
+
+```bash
+# Start services
+docker compose up -d
+
+# Stop services
+docker compose down
+
+# Rebuild services (after Dockerfile changes)
+docker compose build
+
+# View all service status
+docker compose ps
+
+# Clean up everything (removes volumes)
+docker compose down -v
+```
+
+### Docker vs Local Development
+
+| Aspect | Docker | Local |
+|--------|--------|-------|
+| **Setup Time** | Fast (just Docker required) | Longer (multiple tools) |
+| **Consistency** | Identical across machines | May vary by OS/versions |
+| **Performance** | Slight overhead | Native performance |
+| **Disk Usage** | Higher (images + volumes) | Lower |
+| **Offline Work** | Works after initial setup | Requires local installs |
+
+Choose Docker if you:
+- Want quick, consistent setup
+- Work on multiple machines
+- Prefer isolated environments
+- Have team members on different OS
+
+Choose local setup if you:
+- Need maximum performance
+- Already have tools installed
+- Prefer native development
+- Want to use system-wide tools
+
+### Quick Docker Commands Reference
+
+```bash
+# Start development environment
+./scripts/docker-dev.sh start
+# or
+docker compose up -d
+
+# View frontend at http://localhost:5173
+# Access contract builder
+docker compose exec contract-builder bash
+
+# Run tests
+./scripts/docker-dev.sh test
+
+# View logs
+./scripts/docker-dev.sh logs
+
+# Stop everything
+./scripts/docker-dev.sh stop
+
+# Clean up completely
+./scripts/docker-dev.sh clean
+```
 
 ## Development Workflow
 

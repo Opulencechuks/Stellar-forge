@@ -45,6 +45,30 @@ StellarForge is a user-friendly decentralized application (dApp) that enables cr
 
 ## Installation & Setup
 
+You can set up StellarForge using either Docker (recommended for quick start) or local installation.
+
+### Option 1: Docker Setup (Recommended)
+
+**Prerequisites**: Docker and Docker Compose
+
+```bash
+# Clone the repository
+git clone <repository-url>
+cd stellar-forge
+
+# Start development environment
+docker compose up -d
+
+# Frontend available at: http://localhost:5173
+# Access contract builder: docker compose exec contract-builder bash
+```
+
+See [DOCKER_SETUP.md](DOCKER_SETUP.md) for detailed Docker instructions.
+
+### Option 2: Local Installation
+
+**Prerequisites**: Rust, Node.js (v18+), Stellar CLI, Freighter Wallet
+
 ### 1. Clone the Repository
 ```bash
 git clone <repository-url>
