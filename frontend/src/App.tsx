@@ -209,6 +209,16 @@ function AppContent() {
                   }
                 />
                 <Route
+                  path="/token/:address"
+                  element={
+                    <ProtectedRoute>
+                      <ErrorBoundary>
+                        <TokenDetail />
+                      </ErrorBoundary>
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
                   path="/explorer"
                   element={
                     <ErrorBoundary>
